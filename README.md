@@ -1,4 +1,4 @@
-# Zoho CRM Java SDK 5.0
+# ZOHO CRM JAVA SDK 5.0 for API version 5
 
 The Java SDK for Zoho CRM allows developers to easily create Java applications that can be integrated with Zoho CRM. This SDK serves as a wrapper for the REST APIs, making it easier to access and utilize the services of Zoho CRM. 
 Authentication to access the CRM APIs is done through OAuth2.0, and the authentication process is streamlined through the use of the Java SDK. The grant and access/refresh tokens are generated and managed within the SDK code, eliminating the need for manual handling during data synchronization between Zoho CRM and the client application.
@@ -24,9 +24,14 @@ License
     limitations under the License.
 
 ## Latest Version
+
+- [2.0.0](/versions/2.0.0/README.md)
+
+    - Records APIs Issue fixed. 
+        - Supported delete operation in multi-select lookup, multi-user lookup, image upload, and subform fields.
+
 - [1.0.0](/versions/1.0.0/README.md)
 
-    
     - JAVA SDK upgraded to support v5 APIs.
 
     - JAVA SDK improved to support the following new APIs
@@ -45,10 +50,10 @@ For older versions, please [refer](https://github.com/zoho/zohocrm-java-sdk-5.0/
 ## Including the SDK in your project
 You can include the SDK to your project using:
 - Maven
-- [Gradle](/versions/1.0.0/README.md#including-the-sdk-in-your-project)
-- [Download SDK jar](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-5-0/1.0.0/zohocrmsdk-5-0-1.0.0.jar)
+- [Gradle](/versions/2.0.0/README.md#including-the-sdk-in-your-project)
+- [Download SDK jar](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-5-0/2.0.0/zohocrmsdk-5-0-2.0.0.jar)
 
-For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/releases/tag/1.0.0) using Maven, include the following in your **pom.xml** file, which will get created once your **Java** project is created using Maven.
+For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/releases/tag/2.0.0) using Maven, include the following in your **pom.xml** file, which will get created once your **Java** project is created using Maven.
 
     ```xml
     <repositories>
@@ -61,9 +66,9 @@ For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/
         <dependency>
             <groupId>com.zoho.crm</groupId>
             <artifactId>zohocrmsdk-5-0</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0</version>
         </dependency>
     </dependencies>
     ```
 
-For more details, kindly refer [here](/versions/1.0.0/README.md).
+For more details, kindly refer [here](/versions/2.0.0/README.md).
