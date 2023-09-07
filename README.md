@@ -27,9 +27,8 @@ License
 
 - [3.0.0](/versions/3.0.0/README.md)
     
-    - Email related records API pagination Issue fixed.
-        - Handled ***next_index*** and ***prev_index*** field datatype.
-    - User-specific fields meta class name conflicts resolved.
+    - **Email-related records API:** API pagination fix to handle ***next_index*** and ***prev_index*** field datatype.
+    - **User-specific fields:** Resolved conflicts in the metaclass names of user-specific fields.
 
 - [2.0.0](/versions/2.0.0/README.md)
 
