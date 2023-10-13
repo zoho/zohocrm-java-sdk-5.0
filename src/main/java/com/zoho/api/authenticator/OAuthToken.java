@@ -29,6 +29,7 @@ import com.zoho.api.logger.SDKLogger;
 import com.zoho.crm.api.Initializer;
 import com.zoho.crm.api.UserSignature;
 import com.zoho.crm.api.dc.DataCenter;
+import com.zoho.crm.api.dc.DataCenter.Environment;
 import com.zoho.crm.api.exception.SDKException;
 import com.zoho.crm.api.util.APIHTTPConnector;
 import com.zoho.crm.api.util.Constants;
@@ -59,20 +60,14 @@ public class OAuthToken implements Token
 
 	private String id;
 
+	private String apiDomain;
+
+
 	public OAuthToken()
 	{
 
 	}
 
-	/**
-	 * Creates an OAuthToken class instance with the specified parameters.
-	 * 
-	 * @param clientID     A String containing the OAuth client id.
-	 * @param clientSecret A String containing the OAuth client secret.
-	 * @param token        A String containing the REFRESH/GRANT token.
-	 * @param type         An enum containing the given token type.
-	 * @param redirectURL  A String containing the OAuth redirect URL.
-	 */
 	private OAuthToken(String clientID, String clientSecret, String grantToken, String refreshToken, String redirectURL, String id, String accessToken, UserSignature userSignature)
 	{
 		this.clientID = clientID;
@@ -164,9 +159,8 @@ public class OAuthToken implements Token
 
 	/**
 	 * This is a getter method to get OAuth client id.
-	 * 
-	 * @return A String representing the OAuth client id.
-	 */
+	 *
+     */
 	public void setClientId(String clientID)
 	{
 		this.clientID = clientID;
@@ -174,9 +168,8 @@ public class OAuthToken implements Token
 
 	/**
 	 * This is a getter method to get OAuth client secret.
-	 * 
-	 * @return A String representing the OAuth client secret.
-	 */
+	 *
+     */
 	public void setClientSecret(String clientSecret)
 	{
 		this.clientSecret = clientSecret;
@@ -241,7 +234,18 @@ public class OAuthToken implements Token
 	{
 		this.userSignature = userSignature;
 	}
+	
+	public String getAPIDomain()
+	{
+		return apiDomain;
+	}
 
+	public void setAPIDomain(String apiDomain)
+	{
+		this.apiDomain = apiDomain;
+	}
+
+	
 	/**
 	 * @return the id
 	 */
@@ -268,7 +272,6 @@ public class OAuthToken implements Token
 	{
 		Initializer initializer = Initializer.getInitializer();
 		TokenStore store = initializer.getStore();
-		String url = initializer.getEnvironment().getAccountsUrl();
 
 		OAuthToken oauthToken = null;
 		if (this.getId() != null)
@@ -290,6 +293,40 @@ public class OAuthToken implements Token
 			
 			oauthToken = this;
 		}
+		
+		if(oauthToken.getAPIDomain() == null || oauthToken.getAPIDomain().length() <= 0)
+		{
+			if(initializer.getEnvironment() == null)
+			{
+				throw new SDKException(Constants.ENVIRONMENT_ERROR_1, Constants.ENVIRONMENT_ERROR_MESSAGE.concat(" : "));
+			}
+			oauthToken.setAPIDomain(initializer.getEnvironment().getUrl());
+		}
+		Environment environment = DataCenter.get(oauthToken.getAPIDomain());
+		if(environment != null)
+		{
+			Class<?> cl = initializer.getClass();
+			Field member;
+			try
+			{
+				member = cl.getDeclaredField(Constants.ENVIRONMENT);
+				member.setAccessible(true);
+				member.set(initializer, environment);
+			}
+			catch (Exception e)
+			{
+				throw new SDKException(Constants.ENVIRONMENT_ERROR_RESPONSE.concat(" : "), e);
+			}
+		}
+		else
+		{
+			if(initializer.getEnvironment() == null)
+			{
+				throw new SDKException(Constants.ENVIRONMENT_ERROR_1, Constants.ENVIRONMENT_ERROR_MESSAGE.concat(" : "));
+			}
+		}
+		
+		String url = initializer.getEnvironment().getAccountsUrl();
 		if (oauthToken.getAccessToken() == null || oauthToken.getAccessToken().length() == 0)
 		{
 			if (oauthToken.getRefreshToken() != null && oauthToken.getRefreshToken().length() > 0)
@@ -512,11 +549,7 @@ public class OAuthToken implements Token
 			
 			if(responseJSON.has(Constants.API_DOMAIN))
 			{
-				Initializer initializer = Initializer.getInitializer();
-				Class<?> cl = initializer.getClass();
-				Field member = cl.getDeclaredField(Constants.ENVIRONMENT);
-				member.setAccessible(true);
-				member.set(initializer, DataCenter.get(responseJSON.getString(Constants.API_DOMAIN)));
+				oauthToken.setAPIDomain(responseJSON.getString(Constants.API_DOMAIN));
 			}
 		}
 		catch (JSONException ex)
