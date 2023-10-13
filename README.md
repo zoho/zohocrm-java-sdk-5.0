@@ -25,6 +25,9 @@ License
 
 ## Latest Version
 
+- [4.0.0](/versions/4.0.0/README.md)
+    - Added new column(api_domain) in TokenStore.
+
 - [3.0.0](/versions/3.0.0/README.md)
     
     - **Email-related records API:** API pagination fix to handle ***next_index*** and ***prev_index*** field datatype.
@@ -55,10 +58,10 @@ For older versions, please [refer](https://github.com/zoho/zohocrm-java-sdk-5.0/
 ## Including the SDK in your project
 You can include the SDK to your project using:
 - Maven
-- [Gradle](/versions/3.0.0/README.md#including-the-sdk-in-your-project)
-- [Download SDK jar](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-5-0/3.0.0/zohocrmsdk-5-0-3.0.0.jar)
+- [Gradle](/versions/4.0.0/README.md#including-the-sdk-in-your-project)
+- [Download SDK jar](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-5-0/4.0.0/zohocrmsdk-5-0-4.0.0.jar)
 
-For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/releases/tag/3.0.0) using Maven, include the following in your **pom.xml** file, which will get created once your **Java** project is created using Maven.
+For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/releases/tag/4.0.0) using Maven, include the following in your **pom.xml** file, which will get created once your **Java** project is created using Maven.
 
     ```xml
     <repositories>
@@ -71,9 +74,24 @@ For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/
         <dependency>
             <groupId>com.zoho.crm</groupId>
             <artifactId>zohocrmsdk-5-0</artifactId>
-            <version>3.0.0</version>
+            <version>4.0.0</version>
         </dependency>
     </dependencies>
     ```
 
-For more details, kindly refer [here](/versions/3.0.0/README.md).
+---
+
+**NOTE** 
+
+> - The **access and refresh tokens are environment-specific and domain-specific**. When you handle various environments and domains such as **Production**, **Sandbox**, or **Developer** and **IN**, **CN**, **US**, **EU**, **JP**, or **AU**, respectively, you must use the access token and refresh token generated only in those respective environments and domains. The SDK throws an error, otherwise.
+For example, if you generate the tokens for your Sandbox environment in the CN domain, you must use only those tokens for that domain and environment. You cannot use the tokens generated for a different environment or a domain.
+
+> - For **Deal Contact Roles API and Records API**, you will need to provide the **ZohoCRM.settings.fields.ALL** scope along with the **ZohoCRM.modules.ALL** scope while generating the OAuthtoken. Otherwise, the system returns the **OAUTH-SCOPE-MISMATCH** error.
+
+> - For **Related Records API**, the scopes required for generating OAuthtoken are **ZohoCRM.modules.ALL**, **ZohoCRM.settings.fields.ALL** and **ZohoCRM.settings.related_lists.ALL**. Otherwise, the system returns the **OAUTH-SCOPE-MISMATCH** error.
+
+> - For **Mass Convert API**, you will need to provide the **ZohoCRM.settings.fields.ALL** scope along with the **ZohoCRM.mass_convert.leads.CREATE** and **ZohoCRM.mass_convert.leads.READ** scope while generating the OAuthtoken. Otherwise, the system returns the **OAUTH-SCOPE-MISMATCH** error.
+
+---
+
+For more details, kindly refer [here](/versions/4.0.0/README.md).

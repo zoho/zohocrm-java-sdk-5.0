@@ -65,7 +65,7 @@ public abstract class DataCenter
 			}
 			return USDataCenter.PRODUCTION;
 		}
-		if(Constants.JP_DATACENTER.stream().anyMatch(a -> a.equals(config)))
+		else if(Constants.JP_DATACENTER.stream().anyMatch(a -> a.equals(config)))
 		{
 			if(config.contains(Constants.SANDBOX))
 			{
@@ -77,7 +77,7 @@ public abstract class DataCenter
 			}
 			return JPDataCenter.PRODUCTION;
 		}
-		if(Constants.IN_DATACENTER.stream().anyMatch(a -> a.equals(config)))
+		else if(Constants.IN_DATACENTER.stream().anyMatch(a -> a.equals(config)))
 		{
 			if(config.contains(Constants.SANDBOX))
 			{
@@ -95,7 +95,7 @@ public abstract class DataCenter
 			{
 				return EUDataCenter.SANDBOX;
 			}
-			else if(config.contains("developer"))
+			else if(config.contains(Constants.DEVELOPER))
 			{
 				return EUDataCenter.DEVELOPER;
 			}
@@ -125,6 +125,6 @@ public abstract class DataCenter
 			}
 			return AUDataCenter.PRODUCTION;
 		}
-		throw new SDKException(Constants.DATACENTER_ERROR, Constants.ENVIRONMENT_ERROR);	
+		return null;
 	}
 }
