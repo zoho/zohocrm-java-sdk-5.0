@@ -11,9 +11,8 @@ import com.zoho.crm.api.ParameterMap;
 import com.zoho.crm.api.UserSignature;
 import com.zoho.crm.api.dc.DataCenter;
 import com.zoho.crm.api.dc.DataCenter.Environment;
-
+import com.zoho.crm.api.exception.SDKException;
 import com.zoho.crm.api.record.APIException;
-import com.zoho.crm.api.record.Info;
 import com.zoho.crm.api.record.RecordOperations;
 import com.zoho.crm.api.record.ResponseHandler;
 import com.zoho.crm.api.record.ResponseWrapper;
@@ -22,35 +21,66 @@ import com.zoho.crm.api.util.APIResponse;
 
 public class Main
 {
-	public static void main(String[] args) throws Exception
+	/**
+	 * Function to establish integration between Zylker and Zoho CRM.
+	 * Enough to call this once for a new integration
+	 * 
+	 * @param location String - Obtained from the redirect_uri of the authorization request
+	 * @param grant_token String - Obtained from the redirect_uri of the authorization request
+	 * @param user_email String - Obtained from the current login user details of Zylker
+	 * **/
+	public static Boolean integrateZohoCRM(String location, String grant_token, String user_email) 
 	{
-		Environment environment = DataCenter.get("us"); // or Environment environment = USDataCenter.PRODUCTION;
-		OAuthToken userToken = new OAuthToken.Builder()
-				.clientID(OAuthClientDetails.CLIENT_ID)
-				.clientSecret(OAuthClientDetails.CLIENT_SECRET)
-				.grantToken("1000.xxx.xxxx")
-				.redirectURL(OAuthClientDetails.REDIRECT_URL)
-				.userSignature(new UserSignature("patricia@gmail.com")) // email of the user who is trying to integrate with Zoho CRM
-				.build();
-		new Initializer.Builder()
-		.environment(environment)
-		.token(userToken)
-		.initialize();
-
+		Boolean integrationStatus = Boolean.FALSE;     
+    	
+		try {
+			Environment environment = DataCenter.get(location);
+	    	OAuthToken userToken = new OAuthToken.Builder()
+	    	                .clientID(OAuthClientDetails.CLIENT_ID)
+	    	                .clientSecret(OAuthClientDetails.CLIENT_SECRET)
+	    	                .grantToken(grant_token)
+	    	                .redirectURL(OAuthClientDetails.REDIRECT_URL)
+	    			        .userSignature(new UserSignature(user_email)) //email of the user who is trying to integrate with Zoho CRM
+	    	                .build();
+	    	new Initializer.Builder().environment(environment).token(userToken).initialize(); 
+	    	integrationStatus = Boolean.TRUE;
+	    	
+		} catch (SDKException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return integrationStatus;
+	}
+	
+	/***
+	 * Fetch CRM Data wrt to the input email
+	 * @param email String
+	 * **/
+	public static void fetchCRMData(String email) throws Exception {
+		
+		/**
+		 * Following code sets the context of SDK to fire API calls with respect to the input email. 
+		 * It's enough to call this once in a single thread and not necessary to call this before
+		 * every CRM data fetch.
+		 * **/
 		OAuthToken userToken1 = new OAuthToken.Builder()
-				.userSignature(new UserSignature("patricia@gmail.com")) // email of the user who is trying to integrate with Zoho CRM
-				.build();
-		new Initializer.Builder()
-		.token(userToken1)
-		.initialize();
+			        .userSignature(new UserSignature(email)) 
+			        .build();
+		new Initializer.Builder().token(userToken1).initialize();
+		
+		/**
+		 * Sample SDK code to fetch "Company,Email" field of the Leads module. 
+		 * The records which is accessible to **email** will be fetched. 
+		 * **/
 
-		RecordOperations ro = new RecordOperations();
-		ParameterMap paramInstance = new ParameterMap();
-		List<String> fieldNames = new ArrayList<>(Arrays.asList("Company", "Email"));
-		paramInstance.add(RecordOperations.GetRecordsParam.FIELDS, String.join(",", fieldNames));
-		@SuppressWarnings("rawtypes")
-		APIResponse response = ro.getRecords("Leads", paramInstance, null);
-		if (response != null)
+        RecordOperations ro = new RecordOperations();
+        ParameterMap paramInstance = new ParameterMap();
+        List<String> fieldNames = new ArrayList<>(Arrays.asList("Company", "Email"));
+        paramInstance.add(RecordOperations.GetRecordsParam.FIELDS, String.join(",", fieldNames));
+        @SuppressWarnings("rawtypes")
+        APIResponse response = ro.getRecords("Leads", paramInstance, null);
+        if (response != null)
 		{
 			System.out.println("Status Code: " + response.getStatusCode());
 			if (response.isExpected())
@@ -63,25 +93,6 @@ public class Main
 					for (com.zoho.crm.api.record.Record record : records)
 					{
 						System.out.println("Record ID: " + record.getId());
-						com.zoho.crm.api.users.MinifiedUser createdBy = record.getCreatedBy();
-						if (createdBy != null)
-						{
-							System.out.println("Record Created By User-ID: " + createdBy.getId());
-							System.out.println("Record Created By User-Name: " + createdBy.getName());
-							System.out.println("Record Created By User-Email: " + createdBy.getEmail());
-						}
-						System.out.println("Record CreatedTime: " + record.getCreatedTime());
-						com.zoho.crm.api.users.MinifiedUser modifiedBy = record.getModifiedBy();
-						if (modifiedBy != null)
-						{
-							System.out.println("Record Modified By User-ID: " + modifiedBy.getId());
-							System.out.println("Record Modified By User-Name: " + modifiedBy.getName());
-							System.out.println("Record Modified By User-Email: " + modifiedBy.getEmail());
-						}
-						System.out.println("Record ModifiedTime: " + record.getModifiedTime());
-						// To get particular field value
-						System.out.println("Record Field Value: " + record.getKeyValue("Last_Name"));// FieldApiName
-						System.out.println("Record KeyValues: ");
 						for (Map.Entry<String, Object> entry : record.getKeyValues().entrySet())
 						{
 							String keyName = entry.getKey();
@@ -120,18 +131,6 @@ public class Main
 							}
 						}
 					}
-					Info info = responseWrapper.getInfo();
-					if (info != null)
-					{
-						if (info.getCount() != null)
-						{
-							System.out.println("Record Info Count: " + info.getCount().toString());
-						}
-						if (info.getMoreRecords() != null)
-						{
-							System.out.println("Record Info MoreRecords: " + info.getMoreRecords().toString());
-						}
-					}
 				}
 				else if (responseHandler instanceof APIException)
 				{
@@ -148,4 +147,24 @@ public class Main
 			}
 		}
 	}
+	
+    public static void main(String[] args) throws Exception
+    {
+    	String email = "patricia@gmail.com"; //auto set by the redirect-uri code logic w.r.t to logged in user of Zylker (using cookies)
+      
+    	/**
+    	 * 
+    	 * It's enough to call this integrateZohoCRM code once during the integration setup. 
+    	 * After that, calling the fetchCRMData function with the email is enough to do any operation in Zoho CRM with respect to the email
+    	 * 
+    	 * 3 parameters to the function integrateZohoCRM are obtained based on the context of the redirect-uri
+    	 * **/
+    	String location = "us"; //auto set by request.getParameter("location")
+    	String grant_token = "1000.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; //auto set by request.getParameter("code")
+    	Boolean integrationStatus = integrateZohoCRM(location, grant_token, email);
+    	
+    	if(integrationStatus.booleanValue() == true) {
+    		fetchCRMData(email);
+    	}
+    }
 }
