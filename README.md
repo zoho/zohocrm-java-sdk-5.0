@@ -25,6 +25,38 @@ License
 
 ## Latest Version
 
+- [5.0.0](/versions/5.0.0/README.md)
+    - Added a new key findUser in OAuthToken.
+        - By default, the findUser key is set to true, to set userSignature. However, this requires the ***ZohoCRM.users.READ*** and ***ZohoCRM.org.READ*** scopes to be mandatory. If you do not want to set userSignature, you must set the findUser key to false.
+    - IDS param datatype changed(Long to String).
+        - GetAttachmentsParam
+        - DeleteAttachmentsParam
+        - DeleteRolesParam
+        - GetAssociatedContactRolesParam
+        - DeleteNotesParam
+        - DeleteScoringRulesParam
+        - DeleteTerritoriesParam
+        - DeassociateTerritoryUsersParam
+        - DeleteVariablesParam
+    - Note class seModule field datatype changed(Choice<String> to String).
+    - If-Modified-Since param datatype changed (String to OffsetDateTime).
+        - GetNotesHeader
+        - GetNoteHeader 
+    - Support for the following new APIs.
+        - Organization:
+            - [Get Organization Photo](https://www.zoho.com/crm/developer/docs/api/v5/get-org-img.html)
+            - [Delete Organization Photo](https://www.zoho.com/crm/developer/docs/api/v5/delete-org-img.html)
+        - Record Locking:
+            - [Record Locking Information APIs](https://www.zoho.com/crm/developer/docs/api/v5/get-record-locking-info.html)
+            - [Lock Records](https://www.zoho.com/crm/developer/docs/api/v5/lock-records.html)
+            - [Update Record Locking Information](https://www.zoho.com/crm/developer/docs/api/v5/update-record-locking-info.html)
+            - [Unlock Records](https://www.zoho.com/crm/developer/docs/api/v5/unlock-records.html)
+    - RescheduleHistory ResponseWrapper info field datatype changed(List<into> to info).
+    - ScoringRules Signal namespace field datatype changed(Choice<String> to String).
+    - Tags RecordActionWrapper lockedCount field datatype changed(Boolean to String).
+    - UsersTerritories Territory id field datatype changed(Long to String).
+    - VariablesOperations updateVariableByApiname method add new ParameterMap param.
+
 - [4.0.0](/versions/4.0.0/README.md)
     - Added new column(api_domain) in TokenStore.
 
@@ -59,9 +91,9 @@ For older versions, please [refer](https://github.com/zoho/zohocrm-java-sdk-5.0/
 You can include the SDK to your project using:
 - Maven
 - [Gradle](/versions/4.0.0/README.md#including-the-sdk-in-your-project)
-- [Download SDK jar](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-5-0/4.0.0/zohocrmsdk-5-0-4.0.0.jar)
+- [Download SDK jar](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-5-0/5.0.0/zohocrmsdk-5-0-5.0.0.jar)
 
-For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/releases/tag/4.0.0) using Maven, include the following in your **pom.xml** file, which will get created once your **Java** project is created using Maven.
+For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/releases/tag/5.0.0) using Maven, include the following in your **pom.xml** file, which will get created once your **Java** project is created using Maven.
 
     ```xml
     <repositories>
@@ -74,7 +106,7 @@ For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/
         <dependency>
             <groupId>com.zoho.crm</groupId>
             <artifactId>zohocrmsdk-5-0</artifactId>
-            <version>4.0.0</version>
+            <version>5.0.0</version>
         </dependency>
     </dependencies>
     ```
@@ -94,4 +126,4 @@ For example, if you generate the tokens for your Sandbox environment in the CN d
 
 ---
 
-For more details, kindly refer [here](/versions/4.0.0/README.md).
+For more details, kindly refer [here](/versions/5.0.0/README.md).
