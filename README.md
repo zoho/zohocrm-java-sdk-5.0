@@ -25,6 +25,16 @@ License
 
 ## Latest Version
 
+- [6.0.0](/versions/6.0.0/README.md)
+    - Update RecordLockingOperations class constructor and methods.
+    - Added new parentColumnIndex field in BulkWrite FieldMapping class.
+    - Added new fileNames field in BulkWrite Resource class.
+    - Support for the following new APIs. 
+        - MailMerge:
+            - [Send Mail Merge](https://www.zoho.com/crm/developer/docs/api/v5/send-mail-merge.html)
+            - [Sign Mail Merge](https://www.zoho.com/crm/developer/docs/api/v5/sign-mail-merge.html)
+            - [Download Mail](Mergehttps://www.zoho.com/crm/developer/docs/api/v5/download-mail-merge.html)
+
 - [5.0.0](/versions/5.0.0/README.md)
     - Added a new key findUser in OAuthToken.
         - By default, the findUser key is set to true, to set userSignature. However, this requires the ***ZohoCRM.users.READ*** and ***ZohoCRM.org.READ*** scopes to be mandatory. If you do not want to set userSignature, you must set the findUser key to false.
@@ -91,9 +101,9 @@ For older versions, please [refer](https://github.com/zoho/zohocrm-java-sdk-5.0/
 You can include the SDK to your project using:
 - Maven
 - [Gradle](/versions/4.0.0/README.md#including-the-sdk-in-your-project)
-- [Download SDK jar](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-5-0/5.0.0/zohocrmsdk-5-0-5.0.0.jar)
+- [Download SDK jar](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-5-0/6.0.0/zohocrmsdk-5-0-6.0.0.jar)
 
-For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/releases/tag/5.0.0) using Maven, include the following in your **pom.xml** file, which will get created once your **Java** project is created using Maven.
+For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/releases/tag/6.0.0) using Maven, include the following in your **pom.xml** file, which will get created once your **Java** project is created using Maven.
 
     ```xml
     <repositories>
@@ -106,7 +116,7 @@ For including the latest [version](https://github.com/zoho/zohocrm-java-sdk-5.0/
         <dependency>
             <groupId>com.zoho.crm</groupId>
             <artifactId>zohocrmsdk-5-0</artifactId>
-            <version>5.0.0</version>
+            <version>6.0.0</version>
         </dependency>
     </dependencies>
     ```
@@ -126,4 +136,4 @@ For example, if you generate the tokens for your Sandbox environment in the CN d
 
 ---
 
-For more details, kindly refer [here](/versions/5.0.0/README.md).
+For more details, kindly refer [here](/versions/6.0.0/README.md).
