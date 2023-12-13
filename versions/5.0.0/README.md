@@ -497,7 +497,6 @@ The **environment** key contains the domain information to make API calls. The *
 Initialize the SDK using the following code.
 
 ```java
-package com.zoho.crm.sample.initializer;
 import com.zoho.api.authenticator.OAuthToken;
 import com.zoho.api.authenticator.Token;
 import com.zoho.api.authenticator.store.DBStore;
@@ -511,6 +510,7 @@ import com.zoho.crm.api.SDKConfig;
 import com.zoho.crm.api.UserSignature;
 import com.zoho.crm.api.dc.DataCenter.Environment;
 import com.zoho.crm.api.dc.USDataCenter;
+
 public class Initialize
 {
     public static void main(String[] args) throws Exception
